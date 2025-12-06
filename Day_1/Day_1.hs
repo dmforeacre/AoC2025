@@ -1,9 +1,22 @@
+import System.Environment (getArgs)
+import Text.Read (readMaybe)
+
 main :: IO ()
 main = do
-    contents <- readFile "Day_1.txt"
+    args <- getArgs
+    let part = case args of
+            (p:_) -> maybe 1 id (readMaybe p :: Maybe Int)
+            _     -> 1
+        filename = case args of
+            (_:f:_) -> f
+            _       -> "Day_1.txt"
+    contents <- readFile filename
     let linesOfFile = lines contents
-    --print (turnDialPt1 0 50 linesOfFile)
-    print (turnDialPt2 0 50 linesOfFile)
+    let output = case part of
+            1 -> turnDialPt1 0 50 linesOfFile
+            2 -> turnDialPt2 0 50 linesOfFile
+            _ -> 0
+    print(output)
 
 turnDialPt1 count currPos [] = count
 turnDialPt1 count currPos (line:rest) =
