@@ -1,5 +1,6 @@
 import System.Environment (getArgs)
 import Text.Read (readMaybe)
+import Debug.Trace (traceShow)
 
 main :: IO ()
 main = do
@@ -41,7 +42,8 @@ turnDialPt2 count currPos (line:rest) =
         (c:numStr) ->
             case readMaybe numStr :: Maybe Int of
                 Just num ->
-                    case c of
+                    let dbg = traceShow (newPos, newCount, line, newPos - (num `mod` 100), newPos + (num `mod` 100)) ()
+                    in dbg `seq` case c of
                         'L' -> turnDialPt2 (newCount + (num `div` 100) + (if newPos - (num `mod` 100) < 0 && newPos /= 0 then 1 else 0)) (newPos - num) rest
                         'R' -> turnDialPt2 (newCount + (num `div` 100) + (if newPos + (num `mod` 100) > 100 && newPos /= 0 then 1 else 0)) (newPos + num) rest
                         _   -> 0
